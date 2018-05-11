@@ -1,8 +1,8 @@
 #include<iostream>
 #include<string>
 #include<random>
-
-#include<boost/math/distributions/beta.hpp>
+#include<boost/random/beta_distribution.hpp>
+#include<boost/random/ranlux.hpp>
 
 int main(int argc, char **argv) {
     std::string line;
@@ -12,10 +12,8 @@ int main(int argc, char **argv) {
         sum_x += std::stoi(line);
         tot++;
     }
-    std::uniform_real_distribution<double> uniform(0.0, 1.0);
-    boost::math::beta_distribution<> b(sum_x, tot - sum_x);
-    std::default_random_engine generator(42);
-    double seed = uniform(generator);
-    double sample = boost::math::quantile(b, seed);
+    boost::random::beta_distribution<> dist(sum_x, tot - sum_x);
+    boost::random::ranlux3 gen;
+    double sample = dist(gen);
     std::cout << "beta sample: " << sample << std::endl;
 }
